@@ -22,7 +22,7 @@ if ($cloner -eq "F"){
 
     $vmname = Read-Host "What would you like to call the VM?"
 
-    $newvm = New-VM -Name $vmname -VM $basevm -VMHost $vmhost -Datastore $dstore -Location $folder -NetworkName $network
+    $newvm = New-VM -Name $vmname -VM $basevm -VMHost $vmhost -Datastore $dstore -Location $folder -NetworkName $network | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName $network
     $newvm
     Write-Host "Your full clone has been created"
     exit
