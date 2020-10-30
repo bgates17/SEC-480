@@ -26,5 +26,5 @@ function getIP{
     param ([String] $vmName)
 
     $vm = Get-VM -Name $vmName
-    Write-Host $vm.Guest.IPAddress[0] hostname=$vm.Name
+    Write-Host $vm.Guest.IPAddress[0] hostname=$vm
 }

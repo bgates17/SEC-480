@@ -1,0 +1,18 @@
+[vyos]
+10.0.17.101 hostname=fw-blue5 wan_ip=10.0.17.6 lan_ip=10.0.5.2 lan=10.0.5.0/24 name_server=10.0.17.4 gateway=10.0.17.2
+
+[centos_server]
+10.0.5.77 hostname=centos-1
+10.0.5.75 hostname=centos-2
+10.0.5.76 hostname=centos-3
+
+[ubuntu_server]
+10.0.5.78 hostname=ubuntu-1
+10.0.5.79 hostname=ubuntu-2
+
+[linux_server:children]
+centos_server
+ubuntu_server
+
+[vyos:vars]
+ansible_python_interpreter="/usr/bin/python3"

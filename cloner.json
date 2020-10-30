@@ -2,7 +2,7 @@
     "vcenter_server" : "vcenter.ben.local",
     "esxi_server" : "super5.cyber.local",
     "base_folder" : "BASE-VMS",
-    "preferred_network" : "480-WAN",
+    "preferred_network" : "BLUE5-LAN",
     "preferred_datastore" : "datastore2-super5",
     "domain" : "ben.local"
 
