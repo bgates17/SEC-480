@@ -38,10 +38,10 @@ if ($cloner -eq "L"){
     $folder = Get-Folder -Name $conf.base_folder
 
     $network = $conf.preferred_network
-
     $vmname = Read-Host "What would you like to call the VM?"
 
-    $newvm = New-VM -Name $vmname -VM $basevm -LinkedClone -ReferenceSnapshot $snapshot -VmHost $vmhost -Datastore $dstore -Location $folder | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName $network
+    $newvm = New-VM -Name $vmname -VM $basevm -LinkedClone -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $dstore -Location $folder 
+    $newvm | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName $network
     $newvm
     Write-Host "Your linked VM clone has been created"
     exit
