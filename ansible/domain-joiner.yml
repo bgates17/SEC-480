@@ -1,0 +1,32 @@
+---
+
+- name: domain-joiner
+  hosts: windows_workstation
+  gather_facts: no
+  vars_prompt:
+  - name: domain_user
+    prompt: "provide a domain admininistrator name ex. ben@ben.local"
+
+  - name: domain_password
+    prompt: "provide a domain_password"
+    private: yes
+
+  tasks:
+  - name: Change DNS Server
+    win_dns_client:
+      adapter_names: '{{ device }}'
+      ipv4_addresses:
+        - 10.0.5.5
+  - name: Join the domain
+    win_domain_membership:
+      dns_domain_name: '{{ domain }}'
+      domain_admin_user: '{{ domain_user }}'
+      domain_admin_password: '{{ domain_password }}'
+      domain_ou_path: "OU=Workstations,OU=Computers,OU=blue5,DC=blue5,DC=local"
+      state: domain
+    register: domain_state
+  - name: Reboot
+    win_reboot:
+      msg: "Rebooting...."
+      pre_reboot_delay: 15
+    when: domain_state.reboot_required
