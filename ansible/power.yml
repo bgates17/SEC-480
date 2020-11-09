@@ -1,0 +1,10 @@
+---
+
+- name: Power to High Performance
+  hosts: windows_workstation
+  gather_facts: yes
+  
+  tasks:
+  - name: Changing to High Performance Now
+    win_power_plan:
+      name: high performance
