@@ -1,0 +1,55 @@
+---
+
+- name: parsecsv
+  hosts: domain_controller
+  vars_prompt:
+  - name: path
+    prompt: group file
+    private: no
+  - name: domain_admin
+    prompt: who is the new domain admin?
+    private: no
+  - name: domain_password
+    prompt: what is the new domain admin password?
+    private: yes
+  - name: passwords_users_groups
+    prompt: path to file with passwords, users, and groups
+    private: no
+  tasks:
+  - name: create domain admin
+    win_domain_user:
+      name: "{{domain_admin}}"
+      password: "{{domain_password}}"
+      state: present
+      path: OU=Accounts,OU=blue5,DC=blue5,DC=local
+      groups:
+        - Domain Admins
+
+  - name: read group csv file
+    read_csv:
+      path: "{{ path }}"
+    register: items
+    delegate_to: localhost
+
+  - name: add groups
+    win_domain_group:
+      name: "{{ item.group }}"
+      scope: global
+      path: OU=Groups,OU=Accounts,OU=blue5,DC=blue5,DC=local
+    with_items: "{{ items.list }}"
+
+  - name: read accounts csv file
+    read_csv:
+      path: "{{ passwords_users_groups }}"
+    register: items
+    delegate_to: localhost
+
+  - name: adding users to groups
+    win_domain_user:
+      name: "{{ item.username }}"
+      password: "{{ item.password }}"
+      state: present
+      path: OU=Accounts,OU=blue5,DC=blue5,DC=local
+      groups:
+        - "{{ item.group }}"
+    with_items: "{{ items.list }}"

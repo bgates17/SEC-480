@@ -1,0 +1,36 @@
+---
+
+- name: parsecsv
+  hosts: domain_controller
+  vars_prompt:
+  - name: path
+    prompt: Enter the path to your csv file
+    private: no
+  tasks:
+  - name: read csv file
+    read_csv:
+      path: "{{ path }}"
+    register: items
+    delegate_to: localhost
+
+  - name: an ansible loop
+    debug:
+      msg: "{{ item.username }} - {{ item.group }}"
+    with_items: "{{ items.list }}"
+
+  - name: adding users to groups
+    win_shell: |
+      Add-AdGroupMember -Identity {{ item.group }} -Members {{ item.username }}
+    with_items: "{{ items.list }}"
+
+
+
+      - name: adding users to groups
+    win_domain_user:
+      name: "{{ item.username }}"
+      password: "{{ item.password }}"
+      state: present
+      path: "OU=Accounts,OU=blue5,DC=blue5,DC=local"
+      groups:
+        - "{{ item.group }}"
+    with_items: "{{ items.list }}"
