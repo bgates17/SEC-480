@@ -33,6 +33,9 @@ domain_controller
 [domain_controller]
 10.0.5.5 hostname=dc-blue5
 
+[domain_controller:vars]
+accounts_ou="OU=Accounts,OU=blue5,DC=blue5,DC=local"
+
 [server:vars]
 gateway=10.0.5.2
 prefix=24

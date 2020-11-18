@@ -28,28 +28,28 @@
   - name: read group csv file
     read_csv:
       path: "{{ path }}"
-    register: items
+    register: grouplist
     delegate_to: localhost
 
   - name: add groups
     win_domain_group:
       name: "{{ item.group }}"
       scope: global
-      path: OU=Groups,OU=Accounts,OU=blue5,DC=blue5,DC=local
-    with_items: "{{ items.list }}"
+      path: "OU=Groups,OU=Accounts,OU=blue5,DC=blue5,DC=local"
+    with_items: "{{ grouplist.list }}"
 
   - name: read accounts csv file
     read_csv:
       path: "{{ passwords_users_groups }}"
-    register: items
+    register: accounts
     delegate_to: localhost
 
   - name: adding users to groups
     win_domain_user:
       name: "{{ item.username }}"
+      path: "{{ accounts_ou }}"
       password: "{{ item.password }}"
       state: present
-      path: OU=Accounts,OU=blue5,DC=blue5,DC=local
-      groups:
+      groups: 
         - "{{ item.group }}"
-    with_items: "{{ items.list }}"
+    with_items: "{{ accounts.list }}"
