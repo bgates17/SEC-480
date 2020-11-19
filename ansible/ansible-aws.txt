@@ -1,0 +1,5 @@
+[aws]
+bgates17.gq
+
+[aws:vars]
+ansible_user=ubuntu

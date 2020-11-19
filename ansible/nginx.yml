@@ -1,0 +1,15 @@
+---
+
+- name: aws
+  hosts: aws
+  gather_facts: yes
+  
+  tasks:
+  - name: Get nginx to latest version
+    apt: name=nginx state=latest
+    become: true
+
+  - name: Start nginx
+    service:
+      name: nginx
+      state: started
